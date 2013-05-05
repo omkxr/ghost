@@ -17,6 +17,12 @@
 #include <linux/delay.h>
 #include <linux/io.h>
 #include <linux/of_device.h>
+#include <linux/of_gpio.h>
+#include <linux/gpio.h>
+#include <linux/err.h>
+#include <linux/uaccess.h>
+#include <linux/regulator/consumer.h>
+#include <linux/lcd_notify.h>
 
 #include "mdss.h"
 #include "mdss_panel.h"
@@ -194,6 +200,65 @@ static int __devinit mdss_dsi_probe(struct platform_device *pdev)
 					       __func__, __LINE__);
 				return -ENOMEM;
 			}
+	if (pdata == NULL) {
+		pr_err("%s: Invalid input data\n", __func__);
+		return -EINVAL;
+	}
+	ctrl_pdata = container_of(pdata, struct mdss_dsi_ctrl_pdata,
+				panel_data);
+	pr_debug("%s+:event=%d\n", __func__, event);
+
+	MDSS_XLOG(event, arg, ctrl_pdata->ndx, 0x3333);
+
+	switch (event) {
+	case MDSS_EVENT_UNBLANK:
+		lcd_notifier_call_chain(LCD_EVENT_ON_START, NULL);
+		rc = mdss_dsi_on(pdata);
+		mdss_dsi_op_mode_config(pdata->panel_info.mipi.mode,
+							pdata);
+		if (ctrl_pdata->on_cmds.link_state == DSI_LP_MODE)
+			rc = mdss_dsi_unblank(pdata);
+		break;
+	case MDSS_EVENT_PANEL_ON:
+		ctrl_pdata->ctrl_state |= CTRL_STATE_MDP_ACTIVE;
+		if (ctrl_pdata->on_cmds.link_state == DSI_HS_MODE)
+			rc = mdss_dsi_unblank(pdata);
+		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
+		pdata->panel_info.cont_splash_esd_rdy = true;
+		break;
+	case MDSS_EVENT_BLANK:
+		lcd_notifier_call_chain(LCD_EVENT_OFF_START, NULL);
+		if (ctrl_pdata->off_cmds.link_state == DSI_HS_MODE)
+			rc = mdss_dsi_blank(pdata);
+		break;
+	case MDSS_EVENT_PANEL_OFF:
+		ctrl_pdata->ctrl_state &= ~CTRL_STATE_MDP_ACTIVE;
+		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
+			rc = mdss_dsi_blank(pdata);
+		rc = mdss_dsi_off(pdata);
+		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
+		break;
+	case MDSS_EVENT_CONT_SPLASH_FINISH:
+		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
+			rc = mdss_dsi_blank(pdata);
+		ctrl_pdata->ctrl_state &= ~CTRL_STATE_MDP_ACTIVE;
+		rc = mdss_dsi_cont_splash_on(pdata);
+		break;
+	case MDSS_EVENT_PANEL_CONT_SPLASH_FINISH:
+		if (ctrl_pdata->cont_splash_on)
+			rc = ctrl_pdata->cont_splash_on(pdata);
+		break;
+	case MDSS_EVENT_PANEL_CLK_CTRL:
+		mdss_dsi_clk_req(ctrl_pdata, (int)arg);
+		break;
+	case MDSS_EVENT_DSI_CMDLIST_KOFF:
+		mdss_dsi_cmdlist_commit(ctrl_pdata, 1);
+		break;
+	case MDSS_EVENT_PANEL_UPDATE_FPS:
+		if (arg != NULL) {
+			rc = mdss_dsi_dfps_config(pdata, (int)arg);
+			pr_debug("%s:update fps to = %d\n",
+				__func__, (int)arg);
 		}
 
 		if (mdss_dsi_clk_init(pdev)) {
