@@ -964,6 +964,9 @@ static struct cpufreq_frequency_table freq_table[NR_CPUS][35];
 #define CPU_VDD_MAX		1300
 #define CPU_VDD_MIN		750
 
+#define HFPLL_MIN_VDD		 600000
+#define HFPLL_MAX_VDD		1450000
+
 static unsigned int cnt;
 
 ssize_t show_UV_mV_table(struct cpufreq_policy *policy,	char *buf)
