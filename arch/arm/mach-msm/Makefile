@@ -438,3 +438,5 @@ obj-$(CONFIG_MMI_MSM_CLOCK) += mmi-clock.o
 obj-$(CONFIG_MSM_HOTPLUG) += msm_hotplug.o
 obj-$(CONFIG_BRICKED_HOTPLUG) += bricked_hotplug.o
 obj-$(CONFIG_MSM_LIMITER) += msm_limiter.o
+obj-$(CONFIG_MSM_CPUFREQ_LIMITER) += cpufreq_limit.o
+obj-$(CONFIG_TURBO_BOOST) += msm_turbo.o
