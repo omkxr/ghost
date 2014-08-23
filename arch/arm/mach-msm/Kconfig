@@ -2719,3 +2719,11 @@ config FORCE_FAST_CHARGE
 	  are detected as USB to charge as AC.
 
 endif
+
+config MSM_HOTPLUG
+	bool "MSM hotplug driver"
+	depends on HOTPLUG_CPU
+	default n
+	help
+	  The MSM hotplug driver controls on-/offlining of additional cores based
+	  on current cpu load.
