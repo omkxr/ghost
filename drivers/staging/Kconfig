@@ -136,4 +136,6 @@ source "drivers/staging/ozwpan/Kconfig"
 
 source "drivers/staging/prima_mmi/Kconfig"
 
+source "drivers/staging/vnswap/Kconfig"
+
 endif # STAGING
