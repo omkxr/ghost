@@ -10,7 +10,7 @@ jobs=4
 echo '#############'
 echo 'making clean'
 echo '#############'
-make clean                                                                 # clean the sources
+make clean && mrproper                                                                # clean the sources
 rm -rf out                                                                 # clean the output folder
 echo '#############'
 echo 'making defconfig'
