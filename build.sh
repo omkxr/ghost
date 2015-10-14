@@ -1,4 +1,4 @@
-#!/bin/bash
+'#!/bin/bash
 
 ###### defines ######
 
@@ -37,7 +37,7 @@ echo 'Making Anykernel zip'
 echo '#############'
 echo ''
 cd ~/kernel/anykernel/ 
-zip -r Kernel-$CURRENTDATE.zip ./ -x *.zip *.gitignore *EMPTY_DIRECTORY
+zip -r Kernel.zip ./ -x *.zip *.gitignore *EMPTY_DIRECTORY
 if [[ $1 = -d ]]; then
 cp $zipname ~/kernel/anykernel/$zipname
 echo "Copying $zipname to My Folder"
