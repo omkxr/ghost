@@ -359,9 +359,6 @@ OPTIMIZATION_FLAGS = -marm -mtune=cortex-a7 -mfpu=neon-vfpv4 \
                      -floop-interchange -floop-strip-mine -floop-block
 CFLAGS_MODULE   = $(OPTIMIZATION_FLAGS)
 AFLAGS_MODULE   = $(OPTIMIZATION_FLAGS)
-		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   = -fno-pic
-AFLAGS_MODULE   =
 LDFLAGS_MODULE  =
 CFLAGS_KERNEL   = $(OPTIMIZATION_FLAGS)
 AFLAGS_KERNEL   = $(OPTIMIZATION_FLAGS)
