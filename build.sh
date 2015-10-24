@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo export KBUILD_BUILD_USER=omkar
+export KBUILD_BUILD_USER=omkar
+
+echo  export KBUILD_BUILD_HOST=megatron007
+export KBUILD_BUILD_HOST=megatron007
+
 ###### defines ######
 
 local_dir=$PWD
