@@ -43,7 +43,7 @@ echo 'Making Anykernel zip'
 echo '#############'
 echo ''
 cd ~/kernel/anykernel/ 
-zip -r MeGaByTe-kernel-r3.zip ./ -x *.zip *.gitignore *EMPTY_DIRECTORY
+zip -r MeGaByTe-kernel-r4.zip ./ -x *.zip *.gitignore *EMPTY_DIRECTORY
 if [[ $1 = -d ]]; then
 cp $zipname ~/kernel/anykernel/$zipname
 echo "Copying $zipname to My Folder"
