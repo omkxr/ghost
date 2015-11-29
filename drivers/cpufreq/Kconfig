@@ -76,6 +76,12 @@ config CPU_FREQ_DEFAULT_GOV_USERSPACE
 	  program shall be able to set the CPU dynamically without having
 	  to enable the userspace governor manually.
 
+config CPU_FREQ_DEFAULT_GOV_XPERIENCE
+	bool "xperience"
+	select CPU_FREQ_GOV_XPERIENCE
+	help
+	Use the CPUFreq governor 'xperience' as default.
+
 config CPU_FREQ_DEFAULT_GOV_ONDEMAND
 	bool "ondemand"
 	select CPU_FREQ_GOV_ONDEMAND
@@ -296,6 +302,12 @@ config CPU_FREQ_GOV_SMARTMAX_MOTOX
 config CPU_FREQ_GOV_SMARTMAX_FIND5
         bool "'smartmax' defaults for find5"
         depends on CPU_FREQ_GOV_SMARTMAX
+
+config CPU_FREQ_GOV_XPERIENCE
+	 tristate "'xperience' cpufreq governor"
+	 depends on CPU_FREQ
+	 help
+	'XPerience' - a "powered and smart" governor
 
 menu "x86 CPU frequency scaling drivers"
 depends on X86
